@@ -1,4 +1,6 @@
-using LiveQuotationSignalR.Hubs;
+using LiveQuotationSignalR.Domain;
+using LiveQuotationSignalR.Infra;
+using LiveQuotationSignalR.Infra.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddSingleton<INotificationManager, SignalRNotificationManager>();
 
 var app = builder.Build();
 
