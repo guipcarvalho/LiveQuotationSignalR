@@ -1,4 +1,6 @@
+using LiveQuotationSignalR.Hubs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace LiveQuotationSignalR.Controllers
 {
@@ -12,10 +14,12 @@ namespace LiveQuotationSignalR.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IHubContext<QuotationHub> _hub;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IHubContext<QuotationHub> hub)
         {
             _logger = logger;
+            _hub = hub;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
