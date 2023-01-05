@@ -9,10 +9,10 @@ public record Asset
 
     public record AssetQuotation
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Bid { get; set; }
+        public string? Bid { get; set; }
 
-        public string Ask { get; set; }
+        public string? Ask { get; set; }
     }
 }

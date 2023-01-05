@@ -37,11 +37,7 @@ namespace LiveQuotationSignalR.Worker
                 try
                 {
                     const string assetTicker = "USD-BRL";
-                    var response = await quotationGateway.GetAssetQuotationAsync(assetTicker, stoppingToken);
-
-                    await response.EnsureSuccessStatusCodeAsync();
-
-                    var quotation = response.Content;
+                    var quotation = await quotationGateway.GetAssetQuotationAsync(assetTicker, stoppingToken);
 
                     if (quotation?.UsdBrl?.Ask is null)
                         throw new ArgumentException(nameof(quotation));
