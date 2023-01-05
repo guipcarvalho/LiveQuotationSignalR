@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using LiveQuotationSignalR.Gateways;
+using Microsoft.AspNetCore.SignalR;
 using SignalRSwaggerGen.Attributes;
 
 namespace LiveQuotationSignalR.Infra.Hubs;
@@ -6,7 +7,21 @@ namespace LiveQuotationSignalR.Infra.Hubs;
 [SignalRHub("/quotationHub")]
 public class QuotationHub : Hub
 {
-    public Task SubscribeAssetQuotation(string assetTicker, CancellationToken cancellationToken) => Groups.AddToGroupAsync(Context.ConnectionId, assetTicker, cancellationToken);
+    private readonly IQuotationGateway _gateway;
 
-    public Task UnsubscribeAssetQuotation(string assetTicker, CancellationToken cancellationToken) => Groups.RemoveFromGroupAsync(Context.ConnectionId, assetTicker, cancellationToken);
+    public QuotationHub(IQuotationGateway gateway)
+    {
+        _gateway = gateway;
+    }
+
+    public async Task<string?> SubscribeAssetQuotation(string assetTicker)
+    {
+        await Groups.AddToGroupAsync(Context.ConnectionId, assetTicker);
+
+        var quotation = await _gateway.GetAssetQuotationAsync(assetTicker, CancellationToken.None);
+
+        return quotation?.UsdBrl?.Ask;
+    }
+
+    public Task UnsubscribeAssetQuotation(string assetTicker) => Groups.RemoveFromGroupAsync(Context.ConnectionId, assetTicker);
 }

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <title>LiveQuotationClient</title>
+        <meta charset="utf-8"></head>
+    <body>
+        <h1>Dolar price today:</h1>
+        <h1>R$ <span id="usd_quotation"></span></h1>
+        <script src="./node_modules/@microsoft/signalr/dist/browser/signalr.js"></script>
+        <script>
+            const connection = new signalR.HubConnectionBuilder()
+                                            .withUrl("https://localhost:7158/quotationHub")
+                                            .configureLogging(signalR.LogLevel.Information)
+                                            .build();
+
+            async function start() {
+                try {
+                    await connection.start();
+                    console.log('SignalR Connected.');
+                } catch (err) {
+                    console.log(err);
+                    setTimeout(start, 5000);
+                }
+
+                connection.on('AssetQuotation', (msg) => {
+                    document.getElementById('usd_quotation').innerText = msg;
+                });
+
+                const response = await connection.invoke('SubscribeAssetQuotation', 'USD-BRL');
+
+                document.getElementById('usd_quotation').innerText = response;
+            };
+
+            connection.onclose(async () => {
+                await start();
+            });
+
+            // Start the connection.
+            start();
+
+            document.addEventListener("visibilitychange", function() {
+                if (document.hidden){
+                    connection.stop();
+                } else if(connection.state !== 'Connected'){
+                    setTimeout(start, 1000);
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <title>LiveQuotationClient</title>
+        <meta charset="utf-8"></head>
+    <body>
+        <script src="~\node_modules\@microsoft\signalr\dist\browser"></script>
+        <script>
+            const connection = new signalR.HubConnectionBuilder()
+                                            .withUrl("https://localhost:7158/quotationHub")
+                                            .configureLogging(signalR.LogLevel.Information)
+                                            .build();
+
+            async function start() {
+                try {
+                    await connection.start();
+                    console.log("SignalR Connected.");
+
+                    await connection.invoke("SubscribeAssetQuotation", "USD-BRL");
+                } catch (err) {
+                    console.log(err);
+                    setTimeout(start, 5000);
+                }
+            };
+
+            connection.onclose(async () => {
+                await start();
+            });
+
+            // Start the connection.
+            start();
+        </script>
+    </body>
+</html>
