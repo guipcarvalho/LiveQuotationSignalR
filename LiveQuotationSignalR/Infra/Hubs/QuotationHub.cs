@@ -1,19 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Linq;
+using SignalRSwaggerGen.Attributes;
 
 namespace LiveQuotationSignalR.Infra.Hubs;
 
+[SignalRHub("/quotationHub")]
 public class QuotationHub : Hub
 {
-    public async Task SubscribeAssetQuotation(string assetTicker, CancellationToken cancellationToken)
-    {
-        await Groups.AddToGroupAsync(Context.ConnectionId, assetTicker, cancellationToken);
-    }
+    public Task SubscribeAssetQuotation(string assetTicker, CancellationToken cancellationToken) => Groups.AddToGroupAsync(Context.ConnectionId, assetTicker, cancellationToken);
 
-    public async Task UnsubscribeAssetQuotation(string assetTicker, CancellationToken cancellationToken)
-    {
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, assetTicker, cancellationToken);
-    }
+    public Task UnsubscribeAssetQuotation(string assetTicker, CancellationToken cancellationToken) => Groups.RemoveFromGroupAsync(Context.ConnectionId, assetTicker, cancellationToken);
 }

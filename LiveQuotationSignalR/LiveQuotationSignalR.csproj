@@ -10,14 +10,16 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="Mediatr.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.1" />
     <PackageReference Include="Microsoft.AspnetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="SignalRSwaggerGen" Version="4.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Events\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
