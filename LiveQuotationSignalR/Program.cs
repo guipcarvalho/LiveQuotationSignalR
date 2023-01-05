@@ -1,10 +1,13 @@
 using LiveQuotationSignalR.Domain;
 using LiveQuotationSignalR.Domain.Events;
+using LiveQuotationSignalR.Gateways;
 using LiveQuotationSignalR.Infra;
 using LiveQuotationSignalR.Infra.Bus;
 using LiveQuotationSignalR.Infra.Hubs;
+using LiveQuotationSignalR.Worker;
 using MediatR;
 using Microsoft.OpenApi.Models;
+using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,12 @@ builder.Services.AddMediatR(typeof(Program));
 builder.Services.AddSingleton<INotificationManager, SignalRNotificationManager>();
 builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
 builder.Services.AddScoped<INotificationHandler<AssetQuotationChangedEvent>, AssetQuotationChangedEventHandler>();
+
+builder.Services.AddRefitClient<IQuotationGateway>()
+    .ConfigureHttpClient(
+        c => c.BaseAddress = new Uri(builder.Configuration["UrlQuotationService"]));
+
+builder.Services.AddHostedService<QuotationBackgroundService>();
 
 var app = builder.Build();
 

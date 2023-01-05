@@ -14,7 +14,7 @@ namespace LiveQuotationSignalR.Domain.Events
         public Task Handle(AssetQuotationChangedEvent notification, CancellationToken cancellationToken)
         {
             if(notification.AssetTicker is null)
-                throw new ArgumentNullException(nameof(notification.AssetTicker));
+                throw new ArgumentNullException(nameof(notification));
 
             return _notificationManager.NotifyGroup(notification.AssetTicker, "AssetQuotation", notification.Quotation, cancellationToken);
         }
