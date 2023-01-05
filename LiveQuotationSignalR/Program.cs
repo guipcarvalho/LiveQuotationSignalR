@@ -1,4 +1,5 @@
 using LiveQuotationSignalR.Domain;
+using LiveQuotationSignalR.Domain.Events;
 using LiveQuotationSignalR.Infra;
 using LiveQuotationSignalR.Infra.Bus;
 using LiveQuotationSignalR.Infra.Hubs;
@@ -24,6 +25,7 @@ builder.Services.AddMediatR(typeof(Program));
 
 builder.Services.AddSingleton<INotificationManager, SignalRNotificationManager>();
 builder.Services.AddScoped<IMediatorHandler, MediatorHandler>();
+builder.Services.AddScoped<INotificationHandler<AssetQuotationChangedEvent>, AssetQuotationChangedEventHandler>();
 
 var app = builder.Build();
 
